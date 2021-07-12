@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Card,CardGroup } from 'react-bootstrap';
+import axios from 'axios';
 
 function Profile() {
     const { user, isAuthenticated } = useAuth0();
@@ -15,6 +16,7 @@ function Profile() {
         <div >
 
             <CardGroup style={{width:"25%",marginRight:'auto',marginLeft:'auto'}}>
+                
                 <Card>
                     <Card.Img variant="top" src={`${user.picture}`} />
                     <Card.Body>
