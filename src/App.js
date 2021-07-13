@@ -12,7 +12,7 @@ import {
 import MyFavoriteBooks from './BestBooks';
 import LogoutButton from './component/logoutButton';
 import LoginButton from './component/loginButton';
-import Posts from './component/test';
+
 import { withAuth0 } from '@auth0/auth0-react';
 
 
