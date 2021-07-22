@@ -10,8 +10,7 @@ import {
   Route
 } from "react-router-dom";
 import MyFavoriteBooks from './BestBooks';
-import LogoutButton from './component/logoutButton';
-import LoginButton from './component/loginButton';
+
 
 import { withAuth0 } from '@auth0/auth0-react';
 
@@ -28,9 +27,7 @@ class App extends React.Component {
     return(
       <>
       {/* <LoginButton /> */}
-      <LogoutButton />
-      <LoginButton rederData={this.rederData} />
-
+      
 
         <Router>
           {/* <IsLoadingAndError> */}
@@ -38,7 +35,7 @@ class App extends React.Component {
             <Switch>
               <Route exact path="/">
                 
-                {isAuthenticated?<MyFavoriteBooks email={user.email} />:null}
+                {isAuthenticated?<MyFavoriteBooks email={user.email} userName={user.name} />:null}
               </Route>
 
               <Route exact path="/profile">
