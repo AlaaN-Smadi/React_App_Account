@@ -1,16 +1,16 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Jumbotron from 'react-bootstrap/Jumbotron';
+// import Jumbotron from 'react-bootstrap/Jumbotron';
 import './BestBooks.css';
 import axios from 'axios';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col'
-import { CardGroup } from 'react-bootstrap';
+// import Col from 'react-bootstrap/Col'
+// import { CardGroup } from 'react-bootstrap';
 import { withAuth0 } from '@auth0/auth0-react';
 import Button from 'react-bootstrap/Button';
 import Mymodel from './component/BookFormModal';
-import { tSImportEqualsDeclaration } from '@babel/types';
+// import { tSImportEqualsDeclaration } from '@babel/types';
 import UpdateModal from './component/updateModal';
 
 
@@ -98,7 +98,7 @@ class MyFavoriteBooks extends React.Component {
       data: data2.books
     })
 
-    console.log(this.state.data.books)
+    console.log(data2.books)
 
   }
 
@@ -179,7 +179,7 @@ class MyFavoriteBooks extends React.Component {
           {
             this.state.data.map((item, index) => {
               return (
-                <Card style={{ width: '31%', margin: '1%', background: "#EEF3F6" }}>
+                <Card style={{ width: '31%', margin: '1%', background: "#EEF3F6" }} key={index}>
                   <Card.Header>
                     <Card.Title>
                       {item.name}

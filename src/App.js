@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from './Header';
-import IsLoadingAndError from './IsLoadingAndError';
-import axios from 'axios';
+// import IsLoadingAndError from './IsLoadingAndError';
+// import axios from 'axios';
 import Profile from './component/profille';
 import Footer from './Footer';
 import {
