@@ -9,8 +9,9 @@ import Col from 'react-bootstrap/Col'
 import { CardGroup } from 'react-bootstrap';
 import { withAuth0 } from '@auth0/auth0-react';
 import Button from 'react-bootstrap/Button';
-import Mymodel from './component/model';
+import Mymodel from './component/BookFormModal';
 import { tSImportEqualsDeclaration } from '@babel/types';
+import UpdateModal from './component/updateModal';
 
 
 class MyFavoriteBooks extends React.Component {
@@ -22,7 +23,9 @@ class MyFavoriteBooks extends React.Component {
       data: [],
       email: '',
       show: false,
-      hide: true
+      hide: true,
+      showUpdate: false,
+      updateBookId: 0
     }
   }
 
@@ -40,25 +43,42 @@ class MyFavoriteBooks extends React.Component {
     })
   }
 
+  hideBookUpdate = async () => {
+    await this.setState({
+
+      showUpdate: !this.state.showUpdate
+    })
+  }
+
 
   addNewBookSubmit = async (event) => {
     event.preventDefault();
 
 
 
-    const bookData = {
+
+    let bookData = {
       bookName: event.target.bookName.value,
       bookStatus: event.target.bookStatus.value,
       bookDesc: event.target.bookDesc.value,
-      imgUrl: event.target.imgUrl.value
+      imgUrl: event.target.imgUrl.value,
+      email: this.props.email
     }
 
-    const newDataSend = await axios.post(`${REACT_APP_MONGO_DB}addNewBook`,bookData)
+    console.log(bookData)
+    let newDataSend = await axios.post(`${process.env.REACT_APP_MONGO_DB}addNewBook`, bookData)
 
+    // await this.setState({
+    //   data: newDataSend.data
+    // })
+
+    const data2 = newDataSend.data[0];
     await this.setState({
-      data: newDataSend.data
+      data: data2.books
     })
-    
+
+    await console.log(newDataSend)
+
     this.hideBook()
   }
 
@@ -82,47 +102,116 @@ class MyFavoriteBooks extends React.Component {
 
   }
 
+
+
+  deleteFunc = async (index) => {
+    let deletUrl = `${process.env.REACT_APP_MONGO_DB}deleteMyBook`
+    let paramsEmail = {
+      email: this.props.email
+    }
+
+    let newDataSend = await axios.delete(`${deletUrl}/${index}`, { params: paramsEmail})
+
+    const data2 = newDataSend.data[0];
+    await this.setState({
+      data: data2.books
+    })
+
+    await console.log(newDataSend)
+  }
+
+
+  updateDataFunc = async (event) => {
+    event.preventDefault();
+
+    
+    let updateUrl = `${process.env.REACT_APP_MONGO_DB}updateFun`
+
+    let paramsEmail = {
+      email: this.props.email,
+      url: event.target.imgUrlUpdate.value,
+      desc: event.target.bookDescUpdate.value,
+      status: event.target.bookStatusUpdate.value,
+      name: event.target.bookNameUpdate.value
+    }
+
+    let newDataSend = await axios.put(`${updateUrl}/${this.state.updateBookId}`, { params:paramsEmail  })
+
+    console.log(this.state.updateBookId)
+    const data2 = newDataSend.data[0];
+    await this.setState({
+      data: data2.books
+    })
+
+    await console.log(newDataSend)
+
+    this.hideBookUpdate()
+  } 
+
+  updateFun = async (index) => {
+    
+    await this.setState({
+      updateBookId: index,
+      showUpdate: !this.state.showUpdate
+    })
+    
+  }
+
   render() {
     const { user, isAuthenticated } = this.props.auth0;
 
     // this.props.rederData
     return isAuthenticated && (
-      <div >
+      <div style={{ marginRight: "10%", marginLeft: "10%" }} >
         <Mymodel addNewBookSubmit={this.addNewBookSubmit} onHide={this.hideBook} show={this.state.show} />
-        <Button onClick={this.addBook}> Add Book </Button>
+        
+        <UpdateModal updateFunc={this.updateDataFunc} hideBookUpdate={this.hideBookUpdate} showUpdate={this.state.showUpdate} />
 
-        <h2> {this.props.email} </h2>
-        {
-          this.state.data.map(item => {
-            return (
-              <div>
+        <div style={{ textAlign: "center" }}>
 
-                <Row xs={1} md={2} className="g-4">
+          <h2> {this.props.userName} </h2>
+          <Button onClick={this.addBook}> Add Book </Button>
+         
+        </div>
 
-                  <CardGroup>
-                    <Card style={{ width: '18rem' }}>
-                      <Card.Body>
-                        <Card.Title> {item.name} </Card.Title>
-                        <Card.Text>
-                          {item.status}
-                        </Card.Text>
+        <Row>
+          {/* <Col> */}
+          {
+            this.state.data.map((item, index) => {
+              return (
+                <Card style={{ width: '31%', margin: '1%', background: "#EEF3F6" }}>
+                  <Card.Header>
+                    <Card.Title>
+                      {item.name}
+                    </Card.Title>
+                  </Card.Header>
+                  <Card.Body style={{ background: "#C9DBE6" }}>
 
-                        <Card.Text>
-                          {item.description}
-                        </Card.Text>
+                    <Card.Text>
+                      {item.status}
+                    </Card.Text>
 
-                        <Button> Remove </Button>
-                      </Card.Body>
-                    </Card>
-                  </CardGroup>
-                </Row>
+                    <Card.Text>
+                      {item.description}
+                      {index}
+                    </Card.Text>
 
-              </div>
+                  </Card.Body>
 
+                  <Card.Footer>
+                    <button style={{ float: 'left', background: '#DD2222', color: 'wheat' }} onClick={
+                      async () => { this.deleteFunc(index) }}> Remove </button>
 
-            )
-          })
-        }
+                    <button style={{ float: 'right', background: '#0064FF', color: 'wheat' }} onClick={
+                      async () => {this.updateFun(index)}
+                    }> Update </button>
+                  </Card.Footer>
+                </Card>
+              )
+            })
+          }
+          {/* </Col> */}
+        </Row>
       </div>
     )
   }

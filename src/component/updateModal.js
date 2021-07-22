@@ -1,41 +1,38 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap';
 
 
-class model extends React.Component {
-
-
-
+class UpdateModal extends React.Component {
     render() {
         return (
             <div>
-                <Modal show={this.props.show} onHide={this.props.onHide}>
+                <Modal show={this.props.showUpdate} onHide={this.props.hideBookUpdate}>
                     <Modal.Header closeButton>
-                        <Modal.Title> Add new Books for your great list </Modal.Title>
+                        <Modal.Title> Update the book Info </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Form onSubmit={this.props.addNewBookSubmit} >
+                        <Form onSubmit={this.props.updateFunc} >
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Label> Book Name </Form.Label>
-                                <Form.Control name="bookName" type="text" placeholder=" Book Name " />
+                                <Form.Control required name="bookNameUpdate" type="text" placeholder=" Book Name " />
                                 
                             </Form.Group>
 
                             <Form.Group className="mb-3" controlId="formBasicPassword">
                                 <Form.Label> Status </Form.Label>
-                                <Form.Control name="bookStatus" type="text" placeholder=" Status " />
+                                <Form.Control required name="bookStatusUpdate" type="text" placeholder=" Status " />
                             </Form.Group>
 
                             <Form.Group className="mb-3" controlId="formBasicPassword">
                                 <Form.Label> Description </Form.Label>
-                                <Form.Control name="bookDesc" type="text" placeholder=" Description " />
+                                <Form.Control required name="bookDescUpdate" type="text" placeholder=" Description " />
                             </Form.Group>
 
                             <Form.Group className="mb-3" controlId="formBasicPassword">
                                 <Form.Label> Image link </Form.Label>
-                                <Form.Control name="imgUrl" type="text" placeholder=" Image link " />
+                                <Form.Control required name="imgUrlUpdate" type="text" placeholder=" Image link " />
                             </Form.Group>
                             
                             <Modal.Footer>
@@ -53,4 +50,4 @@ class model extends React.Component {
     }
 }
 
-export default model
+export default UpdateModal
